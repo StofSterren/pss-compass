@@ -33,6 +33,93 @@ int canvas_end(struct canvas* canvas) {
     return OK;
 }
 
+/* Allocate a new pnm. */
+int pnm_new(struct pnm** pnm) {
+    assert(pnm != NULL);
+
+   * pnm = malloc(sizeof(struct pnm));
+
+    if(*pnm == NULL) {
+        return E_MALLOC_FAILED;
+    }
+
+    memset(*pnm, '\0', sizeof(struct pnm));
+
+    return OK;
+}
+
+/* Free a pnm. */
+int pnm_end(struct pnm* pnm) {
+    assert(pnm != NULL);
+
+    if(pnm->bytes != NULL) {
+        free(pnm->bytes);
+    }
+
+    free(pnm);
+
+    return OK;
+}
+
+int pnm_read_byte(struct pnm* pnm, uint8_t* byte) {
+    if(pnm->position == (pnm->length - 1)) {
+        return E_END;
+    }
+
+    *byte = pnm->bytes[++pnm->position];
+
+    return 0;
+}
+
+int pnm_ascii_read_character(struct pnm* pnm, uint8_t* byte) {
+    // XXX check value!
+    return pnm_read_byte(pnm, byte);
+}
+
+int pnm_ascii_skip_whitespace(struct pnm* pnm) {
+    uint8_t byte;
+ 
+    while(!pnm_ascii_read_character(pnm, &byte)) {
+        if(byte != ' ' && byte != '\t' && byte != '\n' && byte != '\r') {
+            break;
+        }
+    }
+
+    return 0;
+}
+
+int pnm_ascii_read_number(struct pnm* pnm, uint16_t* number) {
+    uint8_t byte;
+
+    number = 0;
+
+    while(!pnm_ascii_read_character(pnm, &byte)) {
+        if(byte < '0' || byte > '9') {
+            break;
+        }
+
+        number += byte - '0';
+    }
+
+    return 0;
+}
+
+int pnm_ascii_read_line(struct pnm* pnm, uint16_t* number) {
+    uint8_t byte;
+
+    number = 0;
+
+    while(!pnm_ascii_read_character(pnm, &byte)) {
+        if(byte < '0' || byte > '9') {
+            break;
+        }
+
+        number += byte - '0';
+    }
+
+    return 0;
+}
+
 /* Read a Portable Anymap Format header, the PNM formats include PBM, PGM,
  * and PPM. */
 int pnm_type(size_t length, uint8_t* bytes) {
