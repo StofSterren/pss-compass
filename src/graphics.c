@@ -62,11 +62,11 @@ int pnm_end(struct pnm* pnm) {
 }
 
 int pnm_read_byte(struct pnm* pnm, uint8_t* byte) {
-    if(pnm->position == (pnm->length - 1)) {
+    if(pnm->position == pnm->length) {
         return E_END;
     }
 
-    *byte = pnm->bytes[++pnm->position];
+    *byte = pnm->bytes[pnm->position++];
 
     return 0;
 }

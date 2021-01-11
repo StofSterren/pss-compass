@@ -24,6 +24,45 @@ MU_TEST(test_canvas_end) {
     mu_assert_int_eq(canvas_end(canvas), OK);
 }
 
+MU_TEST(test_pnm_new) {
+    struct pnm *pnm;
+
+    mu_assert_int_eq(pnm_new(&pnm), OK);
+}
+
+MU_TEST(test_pnm_end) {
+    struct pnm *pnm;
+
+    mu_assert_int_eq(pnm_new(&pnm), OK);
+    mu_assert_int_eq(pnm_end(pnm), OK);
+}
+
+MU_TEST(test_pnm_read_byte) {
+    struct pnm *pnm;
+    uint8_t byte;
+    uint8_t buffer[] = { 'A', 'B', 'C' };
+
+    mu_assert_int_eq(pnm_new(&pnm), OK);
+
+    // XXX better
+    pnm->length = 3;
+    pnm->bytes = malloc(3);
+    memcpy(pnm->bytes, buffer, 3);
+
+    mu_assert_int_eq(pnm_read_byte(pnm, &byte), OK);
+    mu_assert_int_eq(byte, 'A');
+
+    mu_assert_int_eq(pnm_read_byte(pnm, &byte), OK);
+    mu_assert_int_eq(byte, 'B');
+
+    mu_assert_int_eq(pnm_read_byte(pnm, &byte), OK);
+    mu_assert_int_eq(byte, 'C');
+
+    mu_assert_int_eq(pnm_read_byte(pnm, &byte), E_END);
+
+    mu_assert_int_eq(pnm_end(pnm), OK);
+}
+
 MU_TEST(test_pnm_type) {
     char *bytes = "foo";
 
@@ -103,6 +142,11 @@ MU_TEST(test_ppm_read) {
 MU_TEST_SUITE(test_graphics) {
     MU_RUN_TEST(test_canvas_new); 
     MU_RUN_TEST(test_canvas_end); 
+
+    MU_RUN_TEST(test_pnm_new); 
+    MU_RUN_TEST(test_pnm_end); 
+
+    MU_RUN_TEST(test_pnm_read_byte); 
 
     MU_RUN_TEST(test_pnm_type); 
     MU_RUN_TEST(test_pnm_size); 
