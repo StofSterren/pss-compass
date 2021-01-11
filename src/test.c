@@ -80,6 +80,10 @@ MU_TEST(test_pnm_ascii_read_number) {
     mu_assert_int_eq(pnm_ascii_read_number(pnm, &number), E_END);
     mu_assert_int_eq(number, 42);
 
+    // TODO should number be reset to 0 in this case?
+    mu_assert_int_eq(pnm_ascii_read_number(pnm, &number), E_END);
+    mu_assert_int_eq(number, 0);
+
     mu_assert_int_eq(pnm_end(pnm), OK);
 }
 
