@@ -44,7 +44,7 @@ MU_TEST(test_pnm_read_byte) {
 
     mu_assert_int_eq(pnm_new(&pnm), OK);
 
-    // XXX better
+    // XXX make this better
     pnm->length = 3;
     pnm->bytes = malloc(3);
     memcpy(pnm->bytes, buffer, 3);
@@ -59,6 +59,26 @@ MU_TEST(test_pnm_read_byte) {
     mu_assert_int_eq(byte, 'C');
 
     mu_assert_int_eq(pnm_read_byte(pnm, &byte), E_END);
+    mu_assert_int_eq(pnm_end(pnm), OK);
+}
+
+MU_TEST(test_pnm_ascii_read_number) {
+    struct pnm *pnm;
+    uint16_t number;
+    uint8_t buffer[] = { '1', '2', '3' };
+
+    mu_assert_int_eq(pnm_new(&pnm), OK);
+
+    // XXX make this better
+    pnm->length = 3;
+    pnm->bytes = malloc(3);
+    memcpy(pnm->bytes, buffer, 3);
+
+    mu_assert_int_eq(pnm_ascii_read_number(pnm, &number), OK);
+    mu_assert_int_eq(number, 123);
+
+    // XXX this should return E_END
+    mu_assert_int_eq(pnm_ascii_read_number(pnm, &number), OK);
 
     mu_assert_int_eq(pnm_end(pnm), OK);
 }
@@ -147,6 +167,8 @@ MU_TEST_SUITE(test_graphics) {
     MU_RUN_TEST(test_pnm_end); 
 
     MU_RUN_TEST(test_pnm_read_byte); 
+
+    MU_RUN_TEST(test_pnm_ascii_read_number);
 
     MU_RUN_TEST(test_pnm_type); 
     MU_RUN_TEST(test_pnm_size); 

@@ -91,14 +91,24 @@ int pnm_ascii_skip_whitespace(struct pnm* pnm) {
 int pnm_ascii_read_number(struct pnm* pnm, uint16_t* number) {
     uint8_t byte;
 
-    number = 0;
+    *number = 0;
 
     while(!pnm_ascii_read_character(pnm, &byte)) {
         if(byte < '0' || byte > '9') {
             break;
         }
 
-        number += byte - '0';
+        if(*number > UINT16_MAX * 10) {
+            return E_BOUNDS;
+        }
+
+        *number *= 10;
+
+        if(*number > UINT16_MAX - byte) {
+            return E_BOUNDS;
+        }
+
+        *number += byte - '0';
     }
 
     return 0;
