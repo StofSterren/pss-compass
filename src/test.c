@@ -24,6 +24,32 @@ MU_TEST(test_canvas_end) {
     mu_assert_int_eq(canvas_end(canvas), OK);
 }
 
+MU_TEST(test_pnm_type) {
+    char *bytes = "foo";
+
+    mu_assert_int_eq(pnm_type(0, (uint8_t*) bytes), E_NOT_PNM);
+    mu_assert_int_eq(pnm_type(1, (uint8_t*) bytes), E_NOT_PNM);
+    mu_assert_int_eq(pnm_type(2, (uint8_t*) bytes), E_NOT_PNM);
+    mu_assert_int_eq(pnm_type(3, (uint8_t*) bytes), E_NOT_PNM);
+
+    bytes = "P1";
+    mu_assert_int_eq(pnm_type(2, (uint8_t*) bytes), E_NOT_PNM_SUPPORTED);
+
+    bytes = "P2";
+    mu_assert_int_eq(pnm_type(2, (uint8_t*) bytes), OK);
+
+    bytes = "P3";
+    mu_assert_int_eq(pnm_type(2, (uint8_t*) bytes), E_NOT_PNM_SUPPORTED);
+
+    bytes = "P4";
+    mu_assert_int_eq(pnm_type(2, (uint8_t*) bytes), OK);
+
+    bytes = "P5";
+    mu_assert_int_eq(pnm_type(2, (uint8_t*) bytes), E_NOT_PNM_SUPPORTED);
+
+    bytes = "P6";
+    mu_assert_int_eq(pnm_type(2, (uint8_t*) bytes), OK);
+}
 
 MU_TEST(test_pbm_read) {
     struct canvas canvas;
@@ -49,6 +75,8 @@ MU_TEST(test_ppm_read) {
 MU_TEST_SUITE(test_graphics) {
     MU_RUN_TEST(test_canvas_new); 
     MU_RUN_TEST(test_canvas_end); 
+
+    MU_RUN_TEST(test_pnm_type); 
 
     MU_RUN_TEST(test_pbm_read); 
     MU_RUN_TEST(test_pgm_read); 
