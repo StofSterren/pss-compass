@@ -14,6 +14,7 @@ int canvas_new(struct canvas**);
 int canvas_end(struct canvas*);
 
 int pnm_type(size_t length, uint8_t *bytes);
+int pnm_size(size_t length, uint8_t *bytes, struct canvas*);
 
 int pbm_read(size_t length, uint8_t* bytes, struct canvas*);
 int pgm_read(size_t length, uint8_t* bytes, struct canvas*);

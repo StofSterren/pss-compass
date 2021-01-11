@@ -9,7 +9,7 @@
 int canvas_new(struct canvas** canvas) {
     assert(canvas != NULL);
 
-    *canvas = malloc(sizeof(struct canvas));
+   * canvas = malloc(sizeof(struct canvas));
 
     if(*canvas == NULL) {
         return E_MALLOC_FAILED;
@@ -35,7 +35,7 @@ int canvas_end(struct canvas* canvas) {
 
 /* Read a Portable Anymap Format header, the PNM formats include PBM, PGM,
  * and PPM. */
-int pnm_type(size_t length, uint8_t *bytes) {
+int pnm_type(size_t length, uint8_t* bytes) {
     if(length < 2) {
         return E_NOT_PNM;
     }
@@ -44,22 +44,32 @@ int pnm_type(size_t length, uint8_t *bytes) {
         return E_NOT_PNM;
     }
 
-    if(bytes[1] != '2' && bytes[1] != '4' && bytes[1] != '6') {
+    if(bytes[1] != '4' && bytes[1] != '5' && bytes[1] != '6') {
         return E_NOT_PNM_SUPPORTED;
     }
 
     return 0;
 }
 
+int pnm_size(size_t length, uint8_t* bytes, struct canvas* canvas) {
+    int err;
+
+    if((err = pnm_type(length, bytes))) {
+        return err;
+    }
+
+    return OK;
+}
+
 /* Read a PBM file into a canvas. */
-int pbm_read(size_t length, uint8_t *bytes, struct canvas *canvas) {
+int pbm_read(size_t length, uint8_t* bytes, struct canvas* canvas) {
     assert(bytes != NULL);
     assert(canvas != NULL);
     return OK;
 }
 
 /* Read a PGM file into a canvas. */
-int pgm_read(size_t length, uint8_t *bytes, struct canvas *canvas) {
+int pgm_read(size_t length, uint8_t* bytes, struct canvas* canvas) {
     assert(bytes != NULL);
     assert(canvas != NULL);
 
@@ -67,7 +77,7 @@ int pgm_read(size_t length, uint8_t *bytes, struct canvas *canvas) {
 }
 
 /* Read a PPM file into a canvas. */
-int ppm_read(size_t length, uint8_t *bytes, struct canvas *canvas) {
+int ppm_read(size_t length, uint8_t* bytes, struct canvas* canvas) {
     assert(bytes != NULL);
     assert(canvas != NULL);
 
