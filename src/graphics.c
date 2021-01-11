@@ -90,10 +90,11 @@ int pnm_ascii_skip_whitespace(struct pnm* pnm) {
 
 int pnm_ascii_read_number(struct pnm* pnm, uint16_t* number) {
     uint8_t byte;
+    int result = 0;
 
     *number = 0;
 
-    while(!pnm_ascii_read_character(pnm, &byte)) {
+    while(!(result = pnm_ascii_read_character(pnm, &byte))) {
         if(byte < '0' || byte > '9') {
             break;
         }
@@ -111,7 +112,7 @@ int pnm_ascii_read_number(struct pnm* pnm, uint16_t* number) {
         *number += byte - '0';
     }
 
-    return 0;
+    return result;
 }
 
 int pnm_ascii_read_line(struct pnm* pnm, uint16_t* number) {
