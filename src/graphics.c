@@ -6,22 +6,22 @@
 #include "graphics.h"
 
 /* Allocate a new canvas. */
-int canvas_new(struct canvas** canvas) {
+int canvas_new(Canvas** canvas) {
     assert(canvas != NULL);
 
-   * canvas = malloc(sizeof(struct canvas));
+   * canvas = malloc(sizeof(Canvas));
 
     if(*canvas == NULL) {
         return E_MALLOC_FAILED;
     }
 
-    memset(*canvas, '\0', sizeof(struct canvas));
+    memset(*canvas, '\0', sizeof(Canvas));
 
     return OK;
 }
 
 /* Free a canvas. */
-int canvas_end(struct canvas* canvas) {
+int canvas_end(Canvas* canvas) {
     assert(canvas != NULL);
 
     if(canvas->values != NULL) {
@@ -34,22 +34,22 @@ int canvas_end(struct canvas* canvas) {
 }
 
 /* Allocate a new pnm. */
-int pnm_new(struct pnm** pnm) {
+int pnm_new(PNM** pnm) {
     assert(pnm != NULL);
 
-   * pnm = malloc(sizeof(struct pnm));
+   * pnm = malloc(sizeof(PNM));
 
     if(*pnm == NULL) {
         return E_MALLOC_FAILED;
     }
 
-    memset(*pnm, '\0', sizeof(struct pnm));
+    memset(*pnm, '\0', sizeof(PNM));
 
     return OK;
 }
 
 /* Free a pnm. */
-int pnm_end(struct pnm* pnm) {
+int pnm_end(PNM* pnm) {
     assert(pnm != NULL);
 
     if(pnm->bytes != NULL) {
@@ -61,7 +61,7 @@ int pnm_end(struct pnm* pnm) {
     return OK;
 }
 
-int pnm_read_byte(struct pnm* pnm, uint8_t* byte) {
+int pnm_read_byte(PNM* pnm, uint8_t* byte) {
     if(pnm->position == pnm->length) {
         return E_END;
     }
@@ -71,12 +71,12 @@ int pnm_read_byte(struct pnm* pnm, uint8_t* byte) {
     return 0;
 }
 
-int pnm_ascii_read_character(struct pnm* pnm, uint8_t* byte) {
+int pnm_ascii_read_character(PNM* pnm, uint8_t* byte) {
     // XXX check value!
     return pnm_read_byte(pnm, byte);
 }
 
-int pnm_ascii_skip_whitespace(struct pnm* pnm) {
+int pnm_ascii_skip_whitespace(PNM* pnm) {
     uint8_t byte;
  
     while(!pnm_ascii_read_character(pnm, &byte)) {
@@ -88,7 +88,7 @@ int pnm_ascii_skip_whitespace(struct pnm* pnm) {
     return 0;
 }
 
-int pnm_ascii_read_number(struct pnm* pnm, uint16_t* number) {
+int pnm_ascii_read_number(PNM* pnm, uint16_t* number) {
     uint8_t byte;
     int result = 0;
 
@@ -115,7 +115,7 @@ int pnm_ascii_read_number(struct pnm* pnm, uint16_t* number) {
     return result;
 }
 
-int pnm_ascii_read_line(struct pnm* pnm, uint16_t* number) {
+int pnm_ascii_read_line(PNM* pnm, uint16_t* number) {
     uint8_t byte;
 
     number = 0;
@@ -149,7 +149,7 @@ int pnm_type(size_t length, uint8_t* bytes) {
     return 0;
 }
 
-int pnm_size(size_t length, uint8_t* bytes, struct canvas* canvas) {
+int pnm_size(size_t length, uint8_t* bytes, Canvas* canvas) {
     int err;
 
     if((err = pnm_type(length, bytes))) {
@@ -160,14 +160,14 @@ int pnm_size(size_t length, uint8_t* bytes, struct canvas* canvas) {
 }
 
 /* Read a PBM file into a canvas. */
-int pbm_read(size_t length, uint8_t* bytes, struct canvas* canvas) {
+int pbm_read(size_t length, uint8_t* bytes, Canvas* canvas) {
     assert(bytes != NULL);
     assert(canvas != NULL);
     return OK;
 }
 
 /* Read a PGM file into a canvas. */
-int pgm_read(size_t length, uint8_t* bytes, struct canvas* canvas) {
+int pgm_read(size_t length, uint8_t* bytes, Canvas* canvas) {
     assert(bytes != NULL);
     assert(canvas != NULL);
 
@@ -175,7 +175,7 @@ int pgm_read(size_t length, uint8_t* bytes, struct canvas* canvas) {
 }
 
 /* Read a PPM file into a canvas. */
-int ppm_read(size_t length, uint8_t* bytes, struct canvas* canvas) {
+int ppm_read(size_t length, uint8_t* bytes, Canvas* canvas) {
     assert(bytes != NULL);
     assert(canvas != NULL);
 

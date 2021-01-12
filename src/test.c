@@ -12,33 +12,33 @@ MU_TEST_SUITE(test_command) {
 }
 
 MU_TEST(test_canvas_new) {
-    struct canvas *canvas;
+    Canvas *canvas;
 
     mu_assert_int_eq(canvas_new(&canvas), OK);
 }
 
 MU_TEST(test_canvas_end) {
-    struct canvas *canvas;
+    Canvas *canvas;
 
     mu_assert_int_eq(canvas_new(&canvas), OK);
     mu_assert_int_eq(canvas_end(canvas), OK);
 }
 
 MU_TEST(test_pnm_new) {
-    struct pnm *pnm;
+    PNM *pnm;
 
     mu_assert_int_eq(pnm_new(&pnm), OK);
 }
 
 MU_TEST(test_pnm_end) {
-    struct pnm *pnm;
+    PNM *pnm;
 
     mu_assert_int_eq(pnm_new(&pnm), OK);
     mu_assert_int_eq(pnm_end(pnm), OK);
 }
 
 MU_TEST(test_pnm_read_byte) {
-    struct pnm *pnm;
+    PNM *pnm;
     uint8_t byte;
     uint8_t buffer[] = { 'A', 'B', 'C' };
 
@@ -63,7 +63,7 @@ MU_TEST(test_pnm_read_byte) {
 }
 
 MU_TEST(test_pnm_ascii_read_number) {
-    struct pnm *pnm;
+    PNM *pnm;
     uint16_t number;
     uint8_t buffer[] = { '1', '2', '3', ' ', '4', '2'};
 
@@ -116,7 +116,7 @@ MU_TEST(test_pnm_type) {
 
 MU_TEST(test_pnm_size) {
     char *bytes = "foo";
-    struct canvas canvas;
+    Canvas canvas;
 
     mu_assert_int_eq(pnm_size(0, (uint8_t*) bytes, &canvas), E_NOT_PNM);
     mu_assert_int_eq(pnm_size(1, (uint8_t*) bytes, &canvas), E_NOT_PNM);
@@ -143,21 +143,21 @@ MU_TEST(test_pnm_size) {
 }
 
 MU_TEST(test_pbm_read) {
-    struct canvas canvas;
+    Canvas canvas;
     char *bytes = "foo";
 
     mu_assert_int_eq(pbm_read(0, (uint8_t*) bytes, &canvas), OK);
 }
 
 MU_TEST(test_pgm_read) {
-    struct canvas canvas;
+    Canvas canvas;
     char *bytes = "foo";
 
     mu_assert_int_eq(pgm_read(0, (uint8_t*) bytes, &canvas), OK);
 }
 
 MU_TEST(test_ppm_read) {
-    struct canvas canvas;
+    Canvas canvas;
     char *bytes = "foo";
 
     mu_assert_int_eq(ppm_read(0, (uint8_t*) bytes, &canvas), OK);

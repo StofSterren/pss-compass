@@ -10,11 +10,15 @@ struct pnm {
     uint8_t *bytes;
 };
 
+typedef struct pnm PNM;
+
 struct canvas {
     size_t x;
     size_t y;
     uint8_t* values;
 };
+
+typedef struct canvas Canvas;
 
 int canvas_new(struct canvas**);
 int canvas_end(struct canvas*);
