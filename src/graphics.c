@@ -37,7 +37,7 @@ int canvas_end(Canvas* canvas) {
 int pnm_new(PNM** pnm) {
     assert(pnm != NULL);
 
-   * pnm = malloc(sizeof(PNM));
+    *pnm = malloc(sizeof(PNM));
 
     if(*pnm == NULL) {
         return E_MALLOC_FAILED;
@@ -57,6 +57,43 @@ int pnm_end(PNM* pnm) {
     }
 
     free(pnm);
+
+    return OK;
+}
+
+int pnm_parse(PNM* pnm, size_t size, uint8_t* bytes) {
+    pnm->bytes = malloc(size);
+
+    if(pnm->bytes == NULL) {
+        return E_MALLOC_FAILED;
+    }
+
+    memcpy(pnm->bytes, bytes, size);
+
+    char type[16] = { 0 };
+    pnm_ascii_read_line(pnm, sizeof(type), (uint8_t*) type);
+
+    if(strncmp(type, "P1", sizeof(type)) == 0) {
+        pnm->type = PNM_TYPE_1;
+    } else if(strncmp(type, "P2", sizeof(type)) == 0) {
+        pnm->type = PNM_TYPE_2;
+    } else if(strncmp(type, "P3", sizeof(type)) == 0) {
+        pnm->type = PNM_TYPE_3;
+    } else if(strncmp(type, "P4", sizeof(type)) == 0) {
+        pnm->type = PNM_TYPE_4;
+    } else if(strncmp(type, "P5", sizeof(type)) == 0) {
+        pnm->type = PNM_TYPE_5;
+    } else if(strncmp(type, "P6", sizeof(type)) == 0) {
+        pnm->type = PNM_TYPE_6;
+    } else {
+        return E_NOT_PNM;
+    }
+
+    uint16_t x;
+    pnm_ascii_read_number(pnm, &x);
+
+    uint16_t y;
+    pnm_ascii_read_number(pnm, &y);
 
     return OK;
 }
@@ -115,19 +152,7 @@ int pnm_ascii_read_number(PNM* pnm, uint16_t* number) {
     return result;
 }
 
-int pnm_ascii_read_line(PNM* pnm, uint16_t* number) {
-    uint8_t byte;
-
-    number = 0;
-
-    while(!pnm_ascii_read_character(pnm, &byte)) {
-        if(byte < '0' || byte > '9') {
-            break;
-        }
-
-        number += byte - '0';
-    }
-
+int pnm_ascii_read_line(PNM* pnm, size_t length, uint8_t* line) {
     return 0;
 }
 

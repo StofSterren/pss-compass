@@ -4,7 +4,17 @@
 #include <stdint.h>
 #include <stdlib.h>
 
+enum pnm_type {
+    PNM_TYPE_1,
+    PNM_TYPE_2,
+    PNM_TYPE_3,
+    PNM_TYPE_4,
+    PNM_TYPE_5,
+    PNM_TYPE_6,
+};
+
 struct pnm {
+    enum pnm_type type;
     size_t length;
     size_t position;
     uint8_t *bytes;
@@ -29,11 +39,12 @@ int pnm_end(struct pnm*);
 int pnm_read_byte(struct pnm*, uint8_t*);
 int pnm_ascii_read_character(struct pnm*, uint8_t*);
 int pnm_ascii_read_number(struct pnm*, uint16_t*);
+int pnm_ascii_read_line(struct pnm*, size_t, uint8_t*);
 
-int pnm_type(size_t length, uint8_t *bytes);
-int pnm_size(size_t length, uint8_t *bytes, struct canvas*);
+int pnm_type(size_t, uint8_t*);
+int pnm_size(size_t, uint8_t*, struct canvas*);
 
-int pbm_read(size_t length, uint8_t* bytes, struct canvas*);
-int pgm_read(size_t length, uint8_t* bytes, struct canvas*);
-int ppm_read(size_t length, uint8_t* bytes, struct canvas*);
+int pbm_read(size_t, uint8_t*, struct canvas*);
+int pgm_read(size_t, uint8_t*, struct canvas*);
+int ppm_read(size_t, uint8_t*, struct canvas*);
 #endif
